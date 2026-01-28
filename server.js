@@ -43,7 +43,6 @@ io.on("connection", (socket) => {
     try {
       ptyProcess.resize(cols, rows);
     } catch (e)
-  });
 
   socket.on("disconnect", () => {
     try { ptyProcess.kill(); } catch {}
