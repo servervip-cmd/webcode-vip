@@ -2,7 +2,8 @@ const socket = io();
 
 const term = new Terminal({
   cursorBlink: true,
-  fontSize: 14,
+  fontSize: 12,   // สำคัญ ทำให้ nano เต็มจอ
+  lineHeight: 1.1,
   fontFamily: "monospace",
   theme: {
     background: "#000000",
