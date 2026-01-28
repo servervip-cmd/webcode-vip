@@ -46,18 +46,7 @@ html, body {
   background: black;
   color: #00ff00;
   border: 1px solid #00ff00;
-  padding: 6px 8px;      /* เดิม 10px 12px */
-  font-size: 13px;       /* เดิม 16px */
-  border-radius: 5px;    /* มนเล็กลงนิด */
-  min-width: 36px;       /* ให้ปุ่มไม่เล็กเกินไป */
-}
-
-/* ตอนคีย์บอร์ดเปิด จะขยับขึ้น */
-.keyboard-open #toolbar {
-  transform: translateY(-260px); /* ความสูงคีย์บอร์ด iOS โดยประมาณ */
-}
-
-/* ตอนคีย์บอร์ดเปิด → ลดความสูง terminal */
-body.keyboard-open #terminal {
-  padding-bottom: 20px
+  padding: 10px 12px;
+  font-size: 16px;
+  border-radius: 6px;
 }
