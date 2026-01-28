@@ -16,13 +16,14 @@ html, body {
   flex-direction: column;
 }
 
-/* พื้นที่ terminal เว้นที่ให้ toolbar */
+/* พื้นที่ terminal จะหดตามคีย์บอร์ด */
 #terminal {
-  height: calc(100% - 70px);
+  height: calc(100% - 70px - var(--kb-height, 0px));
   padding: 5px;
+  transition: height 0.2s ease;
 }
 
-/* แถบปุ่มล่างแบบแอพ */
+/* ===== Toolbar ===== */
 #toolbar {
   position: fixed;
   bottom: 0;
@@ -36,6 +37,7 @@ html, body {
   gap: 8px;
   border-top: 1px solid #00ff00;
   z-index: 9999;
+  transform: translateY(calc(-1 * var(--kb-height, 0px)));
   transition: transform 0.25s ease;
 }
 
