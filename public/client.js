@@ -2,7 +2,7 @@ const socket = io();
 
 const term = new Terminal({
   cursorBlink: true,
-  fontSize: 14,
+  fontSize: 12,
   lineHeight: 1.1,
   fontFamily: "monospace",
   scrollback: 5000,
