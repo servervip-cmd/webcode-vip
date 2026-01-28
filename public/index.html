@@ -9,13 +9,22 @@
                  maximum-scale=1.0, user-scalable=no" />
 
   <title>Web Terminal</title>
-
+  <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm/css/xterm.css" />
 </head>
 <body>
-  <div id="terminal"></div>
+<div id="toolbar">
+  <button onclick="sendEsc()">ESC</button>
+  <button id="ctrlBtn" onclick="toggleCtrl()">CTRL</button>
+  <button onclick="sendKey('c')">C</button>
+  <button onclick="sendKey('x')">X</button>
+  <button onclick="sendKey('o')">O</button>
+  <button onclick="sendKey('z')">Z</button>
+  <button onclick="sendTab()">TAB</button>
+</div>
 
+<div id="terminal"></div>
   <script src="/socket.io/socket.io.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/xterm/lib/xterm.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/xterm-addon-fit/lib/xterm-addon-fit.js"></script>
