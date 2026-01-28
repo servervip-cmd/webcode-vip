@@ -1,7 +1,6 @@
 const socket = io();
 
 const term = new Terminal({
-  
   cursorBlink: true,
   fontSize: 10,   // สำคัญ ทำให้ nano เต็มจอ
   lineHeight: 1.1,
@@ -55,3 +54,22 @@ window.addEventListener("resize", () => {
     rows: term.rows
   });
 });
+
+const termContainer = document.getElementById("terminal");
+
+function enterNanoMode() {
+  if (!document.querySelector(".nano-frame")) {
+    const frame = document.createElement("div");
+    frame.className = "nano-frame";
+    termContainer.parentNode.insertBefore(frame, termContainer);
+    frame.appendChild(termContainer);
+  }
+}
+
+function exitNanoMode() {
+  const frame = document.querySelector(".nano-frame");
+  if (frame) {
+    frame.parentNode.insertBefore(termContainer, frame);
+    frame.remove();
+  }
+}
