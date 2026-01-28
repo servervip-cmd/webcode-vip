@@ -29,7 +29,7 @@ function resizeTerminal() {
 window.addEventListener("resize", resizeTerminal);
 
 term.onData(data => socket.emit("input", data));
-socket.on("output", data => term.write($~ : ));
+socket.on("output", data => term.write(data));
 
 // ===== Mobile Special Keys =====
 
