@@ -30,10 +30,10 @@ html, body {
 
 #terminal {
   position: fixed;
-  top: 0;
+  top: 50px;
   left: 0;
   width: 100%;
-  bottom: 80;
+  bottom: 0;
 }
 
 /* กรอบหน้าต่างเวลารัน nano */
