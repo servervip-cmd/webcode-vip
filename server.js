@@ -28,21 +28,22 @@ io.on("connection", (socket) => {
     env: process.env
   });
 
-  // รับ output จาก terminal
+  // ป้องกันโปรเซสค้าง
+  ptyProcess.on("exit", () => {
+    socket.disconnect(true);
+  });
+
   ptyProcess.on("data", (data) => {
     socket.emit("output", data);
   });
 
-  // รับ input จากหน้าเว็บ
   socket.on("input", (data) => {
-    ptyProcess.write(data);
-  });
-
-  // 👉 ใส่ตรงนี้เลย (หลังสร้าง ptyProcess แล้ว)
-  socket.on("resize", ({ cols, rows }) => {
     try {
-      ptyProcess.resize(cols, rows);
-    } catch (e)
+      ptyProcess.write(data);
+    } catch (e) {
+      console.log("Write error:", e.message);
+    }
+  });
 
   socket.on("disconnect", () => {
     try { ptyProcess.kill(); } catch {}
