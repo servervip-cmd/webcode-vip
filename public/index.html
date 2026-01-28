@@ -26,18 +26,18 @@
 
 <body>
 
-<div id="terminal"></div>
+<div id="terminal-container">
+  <div id="terminal"></div>
 
-<!-- 🔧 TOOLBAR -->
-<div id="toolbar">
-  <button id="ctrlBtn" onclick="toggleCtrl()">CTRL</button>
-  <button onclick="sendESC()">ESC</button>
-  <button onclick="sendTab()">TAB</button>
-
-  <button onclick="sendArrow('up')">↑</button>
-  <button onclick="sendArrow('down')">↓</button>
-  <button onclick="sendArrow('left')">←</button>
-  <button onclick="sendArrow('right')">→</button>
+  <div id="toolbar">
+    <button onclick="toggleCtrl()" id="ctrlBtn">CTRL</button>
+    <button onclick="sendESC()">ESC</button>
+    <button onclick="sendTab()">TAB</button>
+    <button onclick="sendArrow('up')">↑</button>
+    <button onclick="sendArrow('down')">↓</button>
+    <button onclick="sendArrow('left')">←</button>
+    <button onclick="sendArrow('right')">→</button>
+  </div>
 </div>
 
 <script src="/socket.io/socket.io.js"></script>
