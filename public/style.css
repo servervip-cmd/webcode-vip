@@ -20,16 +20,13 @@ html, body {
   z-index: 1000;
 }
 
-#toolbar.show {
-  bottom: 0;              /* โผล่มา */
-}
-
 #toolbar button {
   background: black;
   color: #00ff00;
   border: 1px solid #00ff00;
   padding: 6px 8px;
   font-size: 14px;
+  bottom: 0;
 }
 
 #terminal {
