@@ -33,6 +33,18 @@ function sendKey(k) {
     term.write(k);
   }
 }
+function toggleFull() {
+  const termDiv = document.getElementById("terminal");
+  termDiv.classList.toggle("fullscreen-terminal");
+
+  setTimeout(() => {
+    fitAddon.fit();
+    socket.emit("resize", {
+      cols: term.cols,
+      rows: term.rows
+    });
+  }, 100);
+}
 
 window.addEventListener("resize", () => {
   fitAddon.fit();
