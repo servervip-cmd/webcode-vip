@@ -2,36 +2,29 @@ html, body {
   margin: 0;
   padding: 0;
   height: 100%;
-  background: #000;
-  overflow: hidden; /* กันหน้าจอเลื่อน */
-  touch-action: manipulation;
-}
-
-#terminal {
-  height: 100%;
   width: 100%;
+  background: black;
+  overflow: hidden; /* กันเลื่อนจอ */
+  font-family: monospace;
 }
 
 #toolbar {
-  position: fixed;
-  top: 0;
-  width: 100%;
-  background: #111;
-  padding: 5px;
   display: flex;
   gap: 5px;
-  z-index: 10;
+  padding: 6px;
+  background: #111;
+  flex-wrap: wrap;
 }
 
 #toolbar button {
-  background: #222;
-  color: #0f0;
-  border: 1px solid #0f0;
-  padding: 5px 8px;
-  font-size: 12px;
+  background: black;
+  color: #00ff00;
+  border: 1px solid #00ff00;
+  padding: 6px 8px;
+  font-size: 14px;
 }
 
 #terminal {
-  margin-top: 40px;
-  height: calc(100% - 40px);
+  height: calc(100% - 50px); /* ลบพื้นที่ปุ่มด้านบน */
+  width: 100%;
 }
