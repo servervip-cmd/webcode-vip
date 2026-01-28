@@ -33,9 +33,17 @@ io.on("connection", (socket) => {
     socket.disconnect(true);
   });
 
-  ptyProcess.on("data", (data) => {
-    socket.emit("output", data);
-  });
+ptyProcess.on("data", (data) => {
+  socket.emit("output", data);
+
+  if (data.includes("GNU nano")) {
+    socket.emit("nano-start");
+  }
+
+  if (data.includes("Exit")) {
+    socket.emit("nano-end");
+  }
+});
 
   socket.on("resize", ({ cols, rows }) => {
       ptyProcess.resize(cols, rows);
