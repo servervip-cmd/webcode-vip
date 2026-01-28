@@ -1,10 +1,11 @@
 const socket = io();
 
+/* ================= TERMINAL SETUP ================= */
 const term = new Terminal({
   cursorBlink: true,
   fontSize: 11,
   lineHeight: 1.1,
-  fontFamily: "monospace",
+  fontFamily: "JetBrains Mono, monospace",
   scrollback: 5000,
   theme: {
     background: "#000000",
@@ -41,7 +42,7 @@ term.onData(data => {
   }
 });
 
-/* ================= TOOLBAR ================= */
+/* ================= TOOLBAR BUTTONS ================= */
 
 function updateCtrlButton(state) {
   const btn = document.getElementById("ctrlBtn");
@@ -68,7 +69,7 @@ function sendArrow(dir) {
   if (map[dir]) socket.emit("input", map[dir]);
 }
 
-/* ================= RESIZE ================= */
+/* ================= RESIZE HANDLING ================= */
 
 function resizeTerm() {
   fitAddon.fit();
@@ -80,12 +81,36 @@ function resizeTerm() {
 
 window.addEventListener("resize", resizeTerm);
 
-// มือถือ iOS เวลาแป้นพิมพ์โผล่ viewport จะเปลี่ยน
 if (window.visualViewport) {
   window.visualViewport.addEventListener("resize", resizeTerm);
 }
 
-/* ================= NANO MODE ================= */
+/* ================= FLOATING TOOLBAR (มือถือ) ================= */
+
+const toolbar = document.getElementById("toolbar");
+
+// เมื่อแตะเทอร์มินัล → คีย์บอร์ดขึ้น
+term.textarea.addEventListener("focus", () => {
+  toolbar.classList.add("show");
+});
+
+// เมื่อคีย์บอร์ดหาย
+term.textarea.addEventListener("blur", () => {
+  toolbar.classList.remove("show");
+});
+
+// iOS จับการเปลี่ยน viewport ตอนคีย์บอร์ดขึ้น
+if (window.visualViewport) {
+  window.visualViewport.addEventListener("resize", () => {
+    if (window.visualViewport.height < window.innerHeight) {
+      toolbar.classList.add("show");
+    } else {
+      toolbar.classList.remove("show");
+    }
+  });
+}
+
+/* ================= NANO POPUP MODE ================= */
 
 const termContainer = document.getElementById("terminal");
 
