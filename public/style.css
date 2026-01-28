@@ -1,60 +1,45 @@
-/* ===== ทำให้หน้าเหมือนแอพ ===== */
 html, body {
+  height: 100%;
   margin: 0;
-  padding: 0;
-  height: 100%;
   background: black;
-  overflow: hidden;
   font-family: 'JetBrains Mono', monospace;
+  overflow: hidden;
 }
 
-/* ===== Terminal เต็มจอ ===== */
+/* พื้นที่ terminal เว้นที่ให้ toolbar */
 #terminal {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
+  height: calc(100% - 70px);
+  padding: 5px;
 }
 
-/* ===== Floating Toolbar ===== */
+/* แถบปุ่มล่างแบบแอพ */
 #toolbar {
   position: fixed;
+  bottom: 0;
   left: 0;
-  bottom: -120px; /* ซ่อนไว้ก่อน */
   width: 100%;
+  height: 70px;
   background: #000;
   display: flex;
   justify-content: center;
-  gap: 10px;
-  padding: 10px;
-  transition: bottom 0.25s ease;
-  z-index: 999;
-}
-
-/* ตอนแสดง */
-#toolbar.show {
-  bottom: env(keyboard-inset-height, 0px);
+  align-items: center;
+  gap: 8px;
+  border-top: 1px solid #00ff00;
+  z-index: 9999;
+  transition: transform 0.25s ease;
 }
 
 /* ปุ่ม */
 #toolbar button {
   background: black;
   color: #00ff00;
-  border: 2px solid #00ff00;
-  padding: 10px 14px;
+  border: 1px solid #00ff00;
+  padding: 10px 12px;
   font-size: 16px;
-  border-radius: 8px;
+  border-radius: 6px;
 }
 
-/* กลุ่มปุ่มลูกศร */
-.arrow-pad {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-}
-
-.arrow-row {
-  display: flex;
-  gap: 10px;
+/* ตอนคีย์บอร์ดเปิด จะขยับขึ้น */
+.keyboard-open #toolbar {
+  transform: translateY(-260px); /* ความสูงคีย์บอร์ด iOS โดยประมาณ */
 }
