@@ -40,3 +40,8 @@ html, body {
   height: calc(100vh - 48px);
   overflow: hidden;
 }
+
+/* ตอนคีย์บอร์ดเปิด จะขยับขึ้น */
+.keyboard-open #toolbar {
+  transform: translateY(-260px); /* ความสูงคีย์บอร์ด iOS โดยประมาณ */
+}
