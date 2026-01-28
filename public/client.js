@@ -129,3 +129,37 @@ function exitNanoMode() {
 
 socket.on("nano-start", enterNanoMode);
 socket.on("nano-end", exitNanoMode);
+
+/* ===== iOS KEYBOARD FIX (สำคัญสุด) ===== */
+
+function adjustTerminalForKeyboard() {
+  if (!window.visualViewport) return;
+
+  const vv = window.visualViewport;
+  const keyboardHeight = window.innerHeight - vv.height;
+  const toolbar = document.getElementById("toolbar");
+  const termEl = document.getElementById("terminal");
+
+  if (keyboardHeight > 150) {
+    // คีย์บอร์ดเปิด
+    document.body.classList.add("keyboard-open");
+
+    // เลื่อน toolbar ขึ้น
+    toolbar.style.transform = `translateY(-${keyboardHeight}px)`;
+
+    // ลดความสูง terminal
+    termEl.style.height = `calc(100vh - ${keyboardHeight + toolbar.offsetHeight}px)`;
+
+  } else {
+    // คีย์บอร์ดปิด
+    document.body.classList.remove("keyboard-open");
+    toolbar.style.transform = "translateY(0)";
+    termEl.style.height = "100%";
+  }
+
+  resizeTerm(); // สำคัญมาก ให้ terminal คำนวณขนาดใหม่
+}
+
+if (window.visualViewport) {
+  visualViewport.addEventListener("resize", adjustTerminalForKeyboard);
+}
