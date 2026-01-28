@@ -9,9 +9,10 @@ app.use(cors());
 app.use(express.static("public"));
 
 const server = http.createServer(app);
+
 const io = new Server(server, {
   cors: { origin: "*" },
-  pingTimeout: 60000,     // กันหลุดง่าย
+  pingTimeout: 60000,
   pingInterval: 25000
 });
 
@@ -21,34 +22,42 @@ io.on("connection", (socket) => {
   const shell = process.platform === "win32" ? "powershell.exe" : "bash";
 
   const ptyProcess = pty.spawn(shell, [], {
-    name: "xterm-color",
+    name: "xterm-256color",
     cols: 80,
     rows: 24,
     cwd: process.env.HOME,
-    env: process.env
+    env: {
+      ...process.env,
+      TERM: "xterm-256color"
+    }
   });
 
-  // ป้องกันโปรเซสค้าง
+  let nanoActive = false;
+
+  // ส่ง output ไปหน้าเว็บ
+  ptyProcess.on("data", (data) => {
+    socket.emit("output", data);
+
+    // ตรวจ nano แบบแม่นขึ้น
+    if (!nanoActive && data.includes("GNU nano")) {
+      nanoActive = true;
+      socket.emit("nano-start");
+    }
+
+    // ตอนออก nano หน้าจอจะกลับมาเป็น prompt shell
+    if (nanoActive && /\r?\n.*[@:].*[$#]\s?$/.test(data)) {
+      nanoActive = false;
+      socket.emit("nano-end");
+    }
+  });
+
+  // ถ้า process ปิด ให้ตัดการเชื่อมต่อ
   ptyProcess.on("exit", () => {
-    socket.disconnect(true);
+    console.log("PTY exited");
+    try { socket.disconnect(true); } catch {}
   });
 
-ptyProcess.on("data", (data) => {
-  socket.emit("output", data);
-
-  if (data.includes("GNU nano")) {
-    socket.emit("nano-start");
-  }
-
-  if (data.includes("Exit")) {
-    socket.emit("nano-end");
-  }
-});
-
-  socket.on("resize", ({ cols, rows }) => {
-      ptyProcess.resize(cols, rows);
-  });
-
+  // รับ input จาก client
   socket.on("input", (data) => {
     try {
       ptyProcess.write(data);
@@ -57,15 +66,29 @@ ptyProcess.on("data", (data) => {
     }
   });
 
+  // resize terminal
+  socket.on("resize", ({ cols, rows }) => {
+    try {
+      ptyProcess.resize(cols, rows);
+    } catch (e) {
+      console.log("Resize error:", e.message);
+    }
+  });
+
   socket.on("disconnect", () => {
-    try { ptyProcess.kill(); } catch {}
     console.log("User disconnected");
+    try { ptyProcess.kill(); } catch {}
   });
 });
 
-// กันเซิร์ฟเวอร์ crash
-process.on("uncaughtException", err => console.error("Uncaught:", err));
-process.on("unhandledRejection", err => console.error("Unhandled:", err));
+/* ===== กัน server crash ===== */
+process.on("uncaughtException", (err) =>
+  console.error("Uncaught Exception:", err)
+);
+
+process.on("unhandledRejection", (err) =>
+  console.error("Unhandled Rejection:", err)
+);
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
