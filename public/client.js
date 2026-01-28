@@ -4,27 +4,24 @@ const term = new Terminal({
   cursorBlink: true,
   fontSize: 14,
   fontFamily: "monospace",
-  theme: {
-    background: "#000000",
-    foreground: "#00FF00"
-  }
+  scrollback: 1000
 });
 
 const fitAddon = new FitAddon.FitAddon();
 term.loadAddon(fitAddon);
 
 term.open(document.getElementById("terminal"));
-fitAddon.fit(); // ปรับขนาดให้พอดอ
+fitAddon.fit();
 
-// ปรับขนาดอัตโนมัติเมื่อหมุนจอ
-window.addEventListener("resize", () => {
+function resizeTerminal() {
   fitAddon.fit();
-});
+  socket.emit("resize", {
+    cols: term.cols,
+    rows: term.rows
+  });
+}
 
-term.onData(data => {
-  socket.emit("input", data);
-});
+window.addEventListener("resize", resizeTerminal);
 
-socket.on("output", data => {
-  term.write(data);
-});
+term.onData(data => socket.emit("input", data));
+socket.on("output", data => term.write(data));
