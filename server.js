@@ -37,6 +37,10 @@ io.on("connection", (socket) => {
     socket.emit("output", data);
   });
 
+  socket.on("resize", ({ cols, rows }) => {
+      ptyProcess.resize(cols, rows);
+  });
+
   socket.on("input", (data) => {
     try {
       ptyProcess.write(data);
