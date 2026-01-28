@@ -9,11 +9,22 @@ html, body {
 }
 
 #toolbar {
+  position: fixed;
+  left: 0;
+  width: 100%;
+  background: #111;
+  padding: 6px;
   display: flex;
   gap: 5px;
-  padding: 6px;
-  background: #111;
   flex-wrap: wrap;
+  z-index: 1000;
+
+  bottom: -60px;          /* ซ่อนก่อน */
+  transition: bottom 0.25s ease;
+}
+
+#toolbar.show {
+  bottom: 0;              /* โผล่มา */
 }
 
 #toolbar button {
@@ -25,8 +36,11 @@ html, body {
 }
 
 #terminal {
-  height: calc(100% - 50px); /* ลบพื้นที่ปุ่มด้านบน */
+  position: fixed;
+  top: 0;
+  left: 0;
   width: 100%;
+  bottom: 0;
 }
 
 .fullscreen-terminal {
