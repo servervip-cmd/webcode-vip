@@ -3,36 +3,46 @@
 <head>
   <meta charset="UTF-8" />
 
-  <!-- ทำให้เหมือนแอพมือถือ และซูมไม่ได้ -->
+  <!-- 📱 ทำให้แสดงผลเหมือนแอพมือถือ -->
   <meta name="viewport"
         content="width=device-width, initial-scale=1.0,
-                 maximum-scale=1.0, user-scalable=no" />
+                 maximum-scale=1.0, user-scalable=no,
+                 viewport-fit=cover" />
+
+  <!-- เปิดแบบ Fullscreen บน iOS -->
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="theme-color" content="#000000">
 
   <title>Web Terminal</title>
 
-  <!-- ฟอนต์ -->
+  <!-- ฟอนต์โค้ด -->
   <link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
 
-  <!-- สไตล์ -->
+  <!-- Styles -->
   <link rel="stylesheet" href="style.css" />
   <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm/css/xterm.css" />
 </head>
 
 <body>
 
-<!-- 🔧 TOOLBAR -->
+<!-- 🔧 แถบปุ่มควบคุม (เหมือน iSH) -->
 <div id="toolbar">
   <button id="ctrlBtn" onclick="toggleCtrl()">CTRL</button>
   <button onclick="sendESC()">ESC</button>
   <button onclick="sendTab()">TAB</button>
 
-  <button onclick="sendArrow('up')">↑</button>
-  <button onclick="sendArrow('down')">↓</button>
-  <button onclick="sendArrow('left')">←</button>
-  <button onclick="sendArrow('right')">→</button>
+  <div class="arrow-pad">
+    <button onclick="sendArrow('up')">↑</button>
+    <div class="arrow-row">
+      <button onclick="sendArrow('left')">←</button>
+      <button onclick="sendArrow('down')">↓</button>
+      <button onclick="sendArrow('right')">→</button>
+    </div>
+  </div>
 </div>
 
-<!-- 💻 TERMINAL -->
+<!-- 💻 หน้าจอเทอร์มินัล -->
 <div id="terminal"></div>
 
 <!-- Scripts -->
