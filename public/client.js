@@ -18,13 +18,16 @@ term.loadAddon(fitAddon);
 term.open(document.getElementById("terminal"));
 fitAddon.fit();
 
-socket.on("output", data => term.write(data));
+/* ===== AUTO SCROLL ===== */
+socket.on("output", data => {
+  term.write(data);
+  term.scrollToBottom();
+});
 
 /* ================= INPUT HANDLING ================= */
 
 let ctrlActive = false;
 
-// รับปุ่มจากคีย์บอร์ดจริง
 term.onData(data => {
   if (ctrlActive && data.length === 1) {
     const code = data.toUpperCase().charCodeAt(0) - 64;
@@ -38,7 +41,7 @@ term.onData(data => {
   }
 });
 
-/* ================= TOOLBAR BUTTONS ================= */
+/* ================= TOOLBAR ================= */
 
 function updateCtrlButton(state) {
   const btn = document.getElementById("ctrlBtn");
@@ -52,13 +55,8 @@ function toggleCtrl() {
   updateCtrlButton(ctrlActive);
 }
 
-function sendESC() {
-  socket.emit("input", "\x1b");
-}
-
-function sendTab() {
-  socket.emit("input", "\t");
-}
+function sendESC() { socket.emit("input", "\x1b"); }
+function sendTab() { socket.emit("input", "\t"); }
 
 function sendArrow(dir) {
   const map = {
@@ -67,13 +65,10 @@ function sendArrow(dir) {
     right: "\x1b[C",
     left: "\x1b[D"
   };
-
-  if (map[dir]) {
-    socket.emit("input", map[dir]);
-  }
+  if (map[dir]) socket.emit("input", map[dir]);
 }
 
-/* ================= RESIZE HANDLING ================= */
+/* ================= RESIZE ================= */
 
 function resizeTerm() {
   fitAddon.fit();
@@ -85,7 +80,12 @@ function resizeTerm() {
 
 window.addEventListener("resize", resizeTerm);
 
-/* ================= NANO WINDOW MODE ================= */
+// มือถือ iOS เวลาแป้นพิมพ์โผล่ viewport จะเปลี่ยน
+if (window.visualViewport) {
+  window.visualViewport.addEventListener("resize", resizeTerm);
+}
+
+/* ================= NANO MODE ================= */
 
 const termContainer = document.getElementById("terminal");
 
@@ -95,7 +95,7 @@ function enterNanoMode() {
     frame.className = "nano-frame";
     termContainer.parentNode.insertBefore(frame, termContainer);
     frame.appendChild(termContainer);
-    setTimeout(resizeTerm, 50);
+    setTimeout(resizeTerm, 80);
   }
 }
 
@@ -104,7 +104,7 @@ function exitNanoMode() {
   if (frame) {
     frame.parentNode.insertBefore(termContainer, frame);
     frame.remove();
-    setTimeout(resizeTerm, 50);
+    setTimeout(resizeTerm, 80);
   }
 }
 
