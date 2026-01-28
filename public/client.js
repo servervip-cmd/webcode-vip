@@ -84,34 +84,26 @@ function resizeTerm() {
 
 window.addEventListener("resize", resizeTerm);
 
-/* ================= iOS KEYBOARD DETECTION ================= */
-/* ทำให้ toolbar ลอยขึ้นมาเหนือคีย์บอร์ด */
-
-/* ================= iOS KEYBOARD SAFE RESIZE ================= */
-
+/* ===== Detect iOS keyboard and lift toolbar ===== */
 if (window.visualViewport) {
   const vv = window.visualViewport;
 
-  function adjustLayout() {
+  function adjustForKeyboard() {
     const keyboardHeight = window.innerHeight - vv.height;
-    const terminal = document.getElementById("terminal");
 
     if (keyboardHeight > 150) {
-      // คีย์บอร์ดเปิด
-      toolbar.style.transform = `translateY(-${keyboardHeight}px)`;
-
-      terminal.style.height = `${vv.height - toolbar.offsetHeight}px`;
+      document.body.classList.add("keyboard-open");
+      document.getElementById("toolbar").style.transform =
+        `translateY(-${keyboardHeight}px)`;
     } else {
-      // คีย์บอร์ดปิด
-      toolbar.style.transform = "translateY(0)";
-      terminal.style.height = `calc(100vh - ${toolbar.offsetHeight}px)`;
+      document.body.classList.remove("keyboard-open");
+      document.getElementById("toolbar").style.transform = "translateY(0)";
     }
 
     resizeTerm();
   }
 
-  vv.addEventListener("resize", adjustLayout);
-  adjustLayout();
+  vv.addEventListener("resize", adjustForKeyboard);
 }
 
 /* ================= NANO MODE WINDOW ================= */
