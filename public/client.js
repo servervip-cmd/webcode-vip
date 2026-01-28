@@ -163,3 +163,23 @@ function adjustTerminalForKeyboard() {
 if (window.visualViewport) {
   visualViewport.addEventListener("resize", adjustTerminalForKeyboard);
 }
+
+/* ===== Dynamic iOS Keyboard Height ===== */
+
+function updateKeyboardHeight() {
+  if (!window.visualViewport) return;
+
+  const keyboardHeight = window.innerHeight - window.visualViewport.height;
+
+  if (keyboardHeight > 100) {
+    document.documentElement.style.setProperty('--kb-height', keyboardHeight + 'px');
+  } else {
+    document.documentElement.style.setProperty('--kb-height', '0px');
+  }
+
+  resizeTerm(); // ให้ terminal คำนวณขนาดใหม่
+}
+
+if (window.visualViewport) {
+  visualViewport.addEventListener('resize', updateKeyboardHeight);
+}
