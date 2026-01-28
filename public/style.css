@@ -28,3 +28,13 @@ html, body {
   height: calc(100% - 50px); /* ลบพื้นที่ปุ่มด้านบน */
   width: 100%;
 }
+
+.fullscreen-terminal {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100vw;
+  height: 100vh;
+  z-index: 9999;
+  background: black;
+}
