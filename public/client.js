@@ -5,6 +5,7 @@ const term = new Terminal({
   fontSize: 10,
   lineHeight: 1.1,
   fontFamily: "monospace",
+  scrollback: 5000,
   theme: {
     background: "#000000",
     foreground: "#00ff00"
