@@ -42,9 +42,7 @@ io.on("connection", (socket) => {
   socket.on("resize", ({ cols, rows }) => {
     try {
       ptyProcess.resize(cols, rows);
-    } catch (e) {
-      console.log("Resize error:", e.message);
-    }
+    } catch (e)
   });
 
   socket.on("disconnect", () => {
