@@ -87,24 +87,31 @@ window.addEventListener("resize", resizeTerm);
 /* ================= iOS KEYBOARD DETECTION ================= */
 /* ทำให้ toolbar ลอยขึ้นมาเหนือคีย์บอร์ด */
 
+/* ================= iOS KEYBOARD SAFE RESIZE ================= */
+
 if (window.visualViewport) {
   const vv = window.visualViewport;
 
-  function adjustForKeyboard() {
+  function adjustLayout() {
     const keyboardHeight = window.innerHeight - vv.height;
+    const terminal = document.getElementById("terminal");
 
     if (keyboardHeight > 150) {
       // คีย์บอร์ดเปิด
       toolbar.style.transform = `translateY(-${keyboardHeight}px)`;
+
+      terminal.style.height = `${vv.height - toolbar.offsetHeight}px`;
     } else {
       // คีย์บอร์ดปิด
       toolbar.style.transform = "translateY(0)";
+      terminal.style.height = `calc(100vh - ${toolbar.offsetHeight}px)`;
     }
 
     resizeTerm();
   }
 
-  vv.addEventListener("resize", adjustForKeyboard);
+  vv.addEventListener("resize", adjustLayout);
+  adjustLayout();
 }
 
 /* ================= NANO MODE WINDOW ================= */
