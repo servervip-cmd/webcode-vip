@@ -2,7 +2,7 @@ const socket = io();
 
 const term = new Terminal({
   cursorBlink: true,
-  fontSize: 15,
+  fontSize: 12,
   fontFamily: "'JetBrains Mono', 'Fira Code', monospace",
   letterSpacing: 1,
   lineHeight: 1.2,
