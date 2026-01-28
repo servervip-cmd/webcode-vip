@@ -2,7 +2,7 @@ const socket = io();
 
 const term = new Terminal({
   cursorBlink: true,
-  fontSize: 10,   // สำคัญ ทำให้ nano เต็มจอ
+  fontSize: 10,
   lineHeight: 1.1,
   fontFamily: "monospace",
   theme: {
@@ -18,54 +18,73 @@ term.open(document.getElementById("terminal"));
 fitAddon.fit();
 
 socket.on("output", data => term.write(data));
-term.onData(data => socket.emit("input", data));
 
-function sendCtrl(letter) {
-  const code = letter.toUpperCase().charCodeAt(0) - 64;
-  term.write(String.fromCharCode(code));
-  socket.emit("input", String.fromCharCode(code));
-}
+/* ================= INPUT HANDLING ================= */
 
-function sendKey(key) {
-  if (key === '\t') {
-    socket.emit("input", "\t");
-  }
-}
+let ctrlActive = false;
 
-function sendESC() { term.write("\x1b"); }
-function sendTab() { term.write("\t"); }
-
-let ctrlDown = false;
-function toggleCtrl() { ctrlDown = !ctrlDown; }
-
-function sendKey(k) {
-  if (ctrlDown) {
-    term.write(String.fromCharCode(k.charCodeAt(0) - 96));
-    ctrlDown = false;
+// รับปุ่มจากคีย์บอร์ดจริง
+term.onData(data => {
+  if (ctrlActive && data.length === 1) {
+    const code = data.toUpperCase().charCodeAt(0) - 64;
+    if (code > 0 && code < 32) {
+      socket.emit("input", String.fromCharCode(code));
+    }
+    ctrlActive = false;
+    updateCtrlButton(false);
   } else {
-    term.write(k);
+    socket.emit("input", data);
+  }
+});
+
+/* ================= TOOLBAR BUTTONS ================= */
+
+function updateCtrlButton(state) {
+  const btn = document.getElementById("ctrlBtn");
+  if (!btn) return;
+  btn.style.background = state ? "#00ff00" : "black";
+  btn.style.color = state ? "black" : "#00ff00";
+}
+
+function toggleCtrl() {
+  ctrlActive = !ctrlActive;
+  updateCtrlButton(ctrlActive);
+}
+
+function sendESC() {
+  socket.emit("input", "\x1b");
+}
+
+function sendTab() {
+  socket.emit("input", "\t");
+}
+
+function sendArrow(dir) {
+  const map = {
+    up: "\x1b[A",
+    down: "\x1b[B",
+    right: "\x1b[C",
+    left: "\x1b[D"
+  };
+
+  if (map[dir]) {
+    socket.emit("input", map[dir]);
   }
 }
-function toggleFull() {
-  const termDiv = document.getElementById("terminal");
-  termDiv.classList.toggle("fullscreen-terminal");
 
-  setTimeout(() => {
-    fitAddon.fit();
-    socket.emit("resize", {
-      cols: term.cols,
-      rows: term.rows
-    });
-  }, 100);
-}
+/* ================= RESIZE HANDLING ================= */
 
-window.addEventListener("resize", () => {
+function resizeTerm() {
   fitAddon.fit();
   socket.emit("resize", {
     cols: term.cols,
     rows: term.rows
   });
-});
+}
+
+window.addEventListener("resize", resizeTerm);
+
+/* ================= NANO WINDOW MODE ================= */
 
 const termContainer = document.getElementById("terminal");
 
@@ -75,6 +94,7 @@ function enterNanoMode() {
     frame.className = "nano-frame";
     termContainer.parentNode.insertBefore(frame, termContainer);
     frame.appendChild(termContainer);
+    setTimeout(resizeTerm, 50);
   }
 }
 
@@ -83,6 +103,7 @@ function exitNanoMode() {
   if (frame) {
     frame.parentNode.insertBefore(termContainer, frame);
     frame.remove();
+    setTimeout(resizeTerm, 50);
   }
 }
 
