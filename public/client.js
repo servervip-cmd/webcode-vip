@@ -20,6 +20,18 @@ fitAddon.fit();
 socket.on("output", data => term.write(data));
 term.onData(data => socket.emit("input", data));
 
+function sendCtrl(letter) {
+  const code = letter.toUpperCase().charCodeAt(0) - 64;
+  term.write(String.fromCharCode(code));
+  socket.emit("input", String.fromCharCode(code));
+}
+
+function sendKey(key) {
+  if (key === '\t') {
+    socket.emit("input", "\t");
+  }
+}
+
 function sendESC() { term.write("\x1b"); }
 function sendTab() { term.write("\t"); }
 
