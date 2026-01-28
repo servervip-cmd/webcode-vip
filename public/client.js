@@ -73,3 +73,6 @@ function exitNanoMode() {
     frame.remove();
   }
 }
+
+socket.on("nano-start", enterNanoMode);
+socket.on("nano-end", exitNanoMode);
