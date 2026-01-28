@@ -2,14 +2,23 @@
 <html>
 <head>
   <meta charset="UTF-8" />
+
+  <!-- ทำให้เหมือนแอพมือถือ และซูมไม่ได้ -->
+  <meta name="viewport"
+        content="width=device-width, initial-scale=1.0,
+                 maximum-scale=1.0, user-scalable=no" />
+
   <title>Web Terminal</title>
+
   <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/xterm/css/xterm.css" />
 </head>
 <body>
   <div id="terminal"></div>
 
   <script src="/socket.io/socket.io.js"></script>
   <script src="https://cdn.jsdelivr.net/npm/xterm/lib/xterm.js"></script>
+  <script src="https://cdn.jsdelivr.net/npm/xterm-addon-fit/lib/xterm-addon-fit.js"></script>
   <script src="client.js"></script>
 </body>
 </html>
