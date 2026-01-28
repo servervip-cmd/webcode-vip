@@ -18,9 +18,6 @@ html, body {
   gap: 5px;
   flex-wrap: wrap;
   z-index: 1000;
-
-  bottom: -60px;          /* ซ่อนก่อน */
-  transition: bottom 0.25s ease;
 }
 
 #toolbar.show {
