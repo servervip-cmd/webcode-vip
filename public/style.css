@@ -52,3 +52,27 @@ html, body {
   z-index: 9999;
   background: black;
 }
+
+/* กรอบหน้าต่างเวลารัน nano */
+.nano-frame {
+  position: fixed;
+  top: 60px;
+  left: 10px;
+  right: 10px;
+  bottom: 80px;
+  border: 2px solid #00ff00;
+  border-radius: 6px;
+  box-shadow: 0 0 15px #00ff00;
+  overflow: hidden;
+  background: black;
+  z-index: 500;
+}
+
+/* ให้ terminal ปรับขนาดตามกรอบ */
+.nano-frame #terminal {
+  position: absolute !important;
+  top: 0 !important;
+  bottom: 0 !important;
+  left: 0;
+  right: 0;
+}
