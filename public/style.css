@@ -6,6 +6,16 @@ html, body {
   overflow: hidden;
 }
 
+#terminal-container {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
 /* พื้นที่ terminal เว้นที่ให้ toolbar */
 #terminal {
   height: calc(100% - 70px);
@@ -42,4 +52,9 @@ html, body {
 /* ตอนคีย์บอร์ดเปิด จะขยับขึ้น */
 .keyboard-open #toolbar {
   transform: translateY(-260px); /* ความสูงคีย์บอร์ด iOS โดยประมาณ */
+}
+
+/* ตอนคีย์บอร์ดเปิด → ลดความสูง terminal */
+body.keyboard-open #terminal {
+  padding-bottom: 20px
 }
