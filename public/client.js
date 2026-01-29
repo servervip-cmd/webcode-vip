@@ -23,11 +23,28 @@ const toolbar = document.getElementById("toolbar");
 term.open(termElement);
 fitAddon.fit();
 
-/* ================= AUTO SCROLL ================= */
+/* ================= SMART AUTO SCROLL ================= */
+
+let userScrolledUp = false;
+
+// ตรวจว่าผู้ใช้เลื่อนขึ้นจากล่างสุดไหม
+term.onScroll(() => {
+  const buffer = term.buffer.active;
+  const bottomLine = buffer.baseY + buffer.cursorY;
+  const viewBottom = buffer.viewportY + term.rows;
+
+  // ถ้าไม่ได้อยู่ใกล้บรรทัดล่างสุด แปลว่าผู้ใช้เลื่อนขึ้นไปอ่านของเก่า
+  userScrolledUp = viewBottom < bottomLine - 2;
+});
 
 socket.on("output", data => {
+  const shouldScroll = !userScrolledUp;
+
   term.write(data);
-  term.scrollToBottom();
+
+  if (shouldScroll) {
+    term.scrollToBottom();
+  }
 });
 
 /* ================= INPUT HANDLING ================= */
