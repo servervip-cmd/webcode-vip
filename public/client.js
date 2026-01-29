@@ -117,23 +117,26 @@ window.addEventListener("load", updateKeyboardHeight);
 
 /* ================= NANO MODE WINDOW ================= */
 
+const nanoOverlay = document.getElementById("nanoOverlay");
+const nanoTermDiv = document.getElementById("nano-terminal");
+const mainTermDiv = document.getElementById("terminal");
+
 function enterNanoMode() {
-  if (!document.querySelector(".nano-frame")) {
-    const frame = document.createElement("div");
-    frame.className = "nano-frame";
-    termElement.parentNode.insertBefore(frame, termElement);
-    frame.appendChild(termElement);
-    setTimeout(resizeTerm, 80);
-  }
+  nanoOverlay.classList.remove("hidden");
+
+  // ย้าย terminal ไปอยู่ในหน้าต่าง nano
+  nanoTermDiv.appendChild(mainTermDiv);
+
+  setTimeout(forceResize, 120);
 }
 
 function exitNanoMode() {
-  const frame = document.querySelector(".nano-frame");
-  if (frame) {
-    frame.parentNode.insertBefore(termElement, frame);
-    frame.remove();
-    setTimeout(resizeTerm, 80);
-  }
+  nanoOverlay.classList.add("hidden");
+
+  // ย้ายกลับจอหลัก
+  document.body.appendChild(mainTermDiv);
+
+  setTimeout(forceResize, 120);
 }
 
 socket.on("nano-start", enterNanoMode);
