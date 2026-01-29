@@ -18,7 +18,6 @@ const fitAddon = new FitAddon.FitAddon();
 term.loadAddon(fitAddon);
 
 const termElement = document.getElementById("terminal");
-const toolbar = document.getElementById("toolbar");
 
 term.open(termElement);
 fitAddon.fit();
@@ -27,24 +26,17 @@ fitAddon.fit();
 
 let userScrolledUp = false;
 
-// ตรวจว่าผู้ใช้เลื่อนขึ้นจากล่างสุดไหม
 term.onScroll(() => {
   const buffer = term.buffer.active;
   const bottomLine = buffer.baseY + buffer.cursorY;
   const viewBottom = buffer.viewportY + term.rows;
-
-  // ถ้าไม่ได้อยู่ใกล้บรรทัดล่างสุด แปลว่าผู้ใช้เลื่อนขึ้นไปอ่านของเก่า
   userScrolledUp = viewBottom < bottomLine - 2;
 });
 
 socket.on("output", data => {
   const shouldScroll = !userScrolledUp;
-
   term.write(data);
-
-  if (shouldScroll) {
-    term.scrollToBottom();
-  }
+  if (shouldScroll) term.scrollToBottom();
 });
 
 /* ================= INPUT HANDLING ================= */
@@ -101,27 +93,27 @@ function resizeTerm() {
 
 window.addEventListener("resize", resizeTerm);
 
-/* ===== Detect iOS keyboard and lift toolbar ===== */
-if (window.visualViewport) {
-  const vv = window.visualViewport;
+/* ================= iOS KEYBOARD → CSS VAR ================= */
 
-  function adjustForKeyboard() {
-    const keyboardHeight = window.innerHeight - vv.height;
+function updateKeyboardHeight() {
+  if (!window.visualViewport) return;
 
-    if (keyboardHeight > 150) {
-      document.body.classList.add("keyboard-open");
-      document.getElementById("toolbar").style.transform =
-        `translateY(-${keyboardHeight}px)`;
-    } else {
-      document.body.classList.remove("keyboard-open");
-      document.getElementById("toolbar").style.transform = "translateY(0)";
-    }
+  const keyboardHeight = window.innerHeight - window.visualViewport.height;
 
-    resizeTerm();
-  }
+  document.documentElement.style.setProperty(
+    "--kb-height",
+    keyboardHeight > 100 ? keyboardHeight + "px" : "0px"
+  );
 
-  vv.addEventListener("resize", adjustForKeyboard);
+  resizeTerm();
 }
+
+if (window.visualViewport) {
+  visualViewport.addEventListener("resize", updateKeyboardHeight);
+  visualViewport.addEventListener("scroll", updateKeyboardHeight);
+}
+
+window.addEventListener("load", updateKeyboardHeight);
 
 /* ================= NANO MODE WINDOW ================= */
 
@@ -146,57 +138,3 @@ function exitNanoMode() {
 
 socket.on("nano-start", enterNanoMode);
 socket.on("nano-end", exitNanoMode);
-
-/* ===== iOS KEYBOARD FIX (สำคัญสุด) ===== */
-
-function adjustTerminalForKeyboard() {
-  if (!window.visualViewport) return;
-
-  const vv = window.visualViewport;
-  const keyboardHeight = window.innerHeight - vv.height;
-  const toolbar = document.getElementById("toolbar");
-  const termEl = document.getElementById("terminal");
-
-  if (keyboardHeight > 150) {
-    // คีย์บอร์ดเปิด
-    document.body.classList.add("keyboard-open");
-
-    // เลื่อน toolbar ขึ้น
-    toolbar.style.transform = `translateY(-${keyboardHeight}px)`;
-
-    // ลดความสูง terminal
-    termEl.style.height = `calc(100vh - ${keyboardHeight + toolbar.offsetHeight}px)`;
-
-  } else {
-    // คีย์บอร์ดปิด
-    document.body.classList.remove("keyboard-open");
-    toolbar.style.transform = "translateY(0)";
-    termEl.style.height = "100%";
-  }
-
-  resizeTerm(); // สำคัญมาก ให้ terminal คำนวณขนาดใหม่
-}
-
-if (window.visualViewport) {
-  visualViewport.addEventListener("resize", adjustTerminalForKeyboard);
-}
-
-/* ===== Dynamic iOS Keyboard Height ===== */
-
-function updateKeyboardHeight() {
-  if (!window.visualViewport) return;
-
-  const keyboardHeight = window.innerHeight - window.visualViewport.height;
-
-  if (keyboardHeight > 100) {
-    document.documentElement.style.setProperty('--kb-height', keyboardHeight + 'px');
-  } else {
-    document.documentElement.style.setProperty('--kb-height', '0px');
-  }
-
-  resizeTerm(); // ให้ terminal คำนวณขนาดใหม่
-}
-
-if (window.visualViewport) {
-  visualViewport.addEventListener('resize', updateKeyboardHeight);
-}
