@@ -36,20 +36,20 @@ io.on("connection", (socket) => {
 
   // ส่ง output ไปหน้าเว็บ
   ptyProcess.on("data", (data) => {
-    socket.emit("output", data);
+  socket.emit("output", data);
 
-    // ตรวจ nano แบบแม่นขึ้น
-    if (!nanoActive && data.includes("GNU nano")) {
-      nanoActive = true;
-      socket.emit("nano-start");
-    }
+  // เข้า nano
+  if (data.includes("GNU nano")) {
+    socket.emit("nano-start");
+  }
 
-    // ตอนออก nano หน้าจอจะกลับมาเป็น prompt shell
-    if (nanoActive && /\r?\n.*[@:].*[$#]\s?$/.test(data)) {
-      nanoActive = false;
-      socket.emit("nano-end");
-    }
-  });
+  // ออกจาก nano (Ctrl+X)
+  if (data.includes("Save modified buffer") ||
+      data.includes("File Name to Write") ||
+      data.includes("Exit")) {
+    socket.emit("nano-end");
+  }
+});
 
   // ถ้า process ปิด ให้ตัดการเชื่อมต่อ
   ptyProcess.on("exit", () => {
