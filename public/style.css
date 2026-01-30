@@ -1,7 +1,6 @@
 html, body {
-  height: 100%;
   margin: 0;
-  background: black;
+  background: transparent;
   font-family: 'JetBrains Mono', monospace;
   overflow: hidden;
 }
@@ -18,6 +17,11 @@ html, body {
 
 /* พื้นที่ terminal จะหดตามคีย์บอร์ด */
 #terminal {
+  position: absolute;
+  top: 0; 
+  bottom: 0;
+  left: 0; 
+ 	right: 0;
   height: calc(100% - 70px - var(--kb-height, 0px));
   padding: 5px;
   transition: height 0.2s ease;
