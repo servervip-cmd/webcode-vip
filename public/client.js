@@ -107,7 +107,14 @@ function resizeTerm() {
   });
 }
 
-window.addEventListener("resize", resizeTerm);
+let resizeTimeout;
+
+window.addEventListener("resize", () => {
+  clearTimeout(resizeTimeout);
+  resizeTimeout = setTimeout(() => {
+    resizeTerm();
+  }, 120); // รอให้หยุดขยับก่อนค่อย resize
+});
 
 /* ================= iOS KEYBOARD → CSS VAR ================= */
 
