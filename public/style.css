@@ -91,3 +91,14 @@ html, body {
   flex: 1;
   padding: 6px;
 }
+
+/* ให้เลือกข้อความใน terminal ได้ */
+.xterm {
+  user-select: text !important;
+  -webkit-user-select: text !important;
+}
+
+/* เวลากดค้างจะมีเมนู Copy */
+.xterm-viewport {
+  touch-action: auto !important;
+}
