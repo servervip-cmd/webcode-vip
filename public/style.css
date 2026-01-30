@@ -45,7 +45,7 @@ html, body {
   background: black;
   color: #00ff00;
   border: 1px solid #00ff00;
-  padding: 6px 8px;      /* เดิม 10px 12px */
+  padding: 5px 7px;      /* เดิม 10px 12px */
   font-size: 12px;       /* เดิม 16px */
   border-radius: 5px;    /* มนเล็กลงนิด */
   min-width: 36px;       /* ให้ปุ่มไม่เล็กเกินไป */
