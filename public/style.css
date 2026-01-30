@@ -1,6 +1,7 @@
 html, body {
   margin: 0;
-  background: transparent;
+  background:%20black;
+  height: 100%;
   font-family: 'JetBrains Mono', monospace;
   overflow: hidden;
 }
