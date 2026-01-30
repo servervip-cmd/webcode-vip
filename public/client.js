@@ -7,7 +7,7 @@ const term = new Terminal({
   fontSize: 11,
   lineHeight: 1.1,
   fontFamily: "JetBrains Mono, monospace",
-  scrollback: 5000,
+  scrollback: 2000,
   theme: {
     background: "#000000",
     foreground: "#00ff00"
