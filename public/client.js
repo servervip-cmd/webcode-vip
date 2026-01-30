@@ -141,3 +141,12 @@ function exitNanoMode() {
 
 socket.on("nano-start", enterNanoMode);
 socket.on("nano-end", exitNanoMode);
+
+async function pasteFromClipboard() {
+  try {
+    const text = await navigator.clipboard.readText();
+    socket.emit("input", text);
+  } catch (err) {
+    alert("ไม่สามารถวางข้อความได้ เบราว์เซอร์อาจไม่อนุญาต");
+  }
+}
