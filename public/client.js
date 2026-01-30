@@ -3,7 +3,7 @@ const socket = io();
 /* ================= TERMINAL SETUP ================= */
 
 const term = new Terminal({
-  cursorBlink: true,
+  cursorBlink: false,
   fontSize: 11,
   lineHeight: 1.1,
   fontFamily: "JetBrains Mono, monospace",
