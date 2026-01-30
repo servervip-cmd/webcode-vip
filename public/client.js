@@ -33,10 +33,26 @@ term.onScroll(() => {
   userScrolledUp = viewBottom < bottomLine - 2;
 });
 
+let writeBuffer = "";
+let writeScheduled = false;
+
 socket.on("output", data => {
-  const shouldScroll = !userScrolledUp;
-  term.write(data);
-  if (shouldScroll) term.scrollToBottom();
+  writeBuffer += data;
+
+  if (!writeScheduled) {
+    writeScheduled = true;
+
+    requestAnimationFrame(() => {
+      const shouldScroll = !userScrolledUp;
+
+      term.write(writeBuffer);
+
+      if (shouldScroll) term.scrollToBottom();
+
+      writeBuffer = "";
+      writeScheduled = false;
+    });
+  }
 });
 
 /* ================= INPUT HANDLING ================= */
