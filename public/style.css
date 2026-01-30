@@ -4,6 +4,10 @@ html, body {
   height: 100%;
   font-family: 'JetBrains Mono', monospace;
   overflow: hidden;
+  
+    /* กันเนื้อหาชนขอบจอ iPhone */
+  padding-top: env(safe-area-inset-top);
+  padding-bottom: env(safe-area-inset-bottom);
 }
 
 #terminal-container {
