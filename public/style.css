@@ -34,9 +34,10 @@ body {
   bottom: 0;
   left: 0; 
   right: 0;
-  height: calc(100% - 70px - var(--kb-height, 0px));
+  flex: 1;
+  height: calc(100dvh - var(--kb-height, 0px) - 70px);
   padding: 5px;
-  transition: height 0.2s ease;
+  transition: height 0.15s ease;
 }
 
 /* ===== Toolbar ===== */
@@ -52,10 +53,9 @@ body {
   align-items: center;
   gap: 8px;
   border-top: 1px solid #00ff00;
-  z-index: 9999;
-  padding-bottom: calc(env(safe-area-inset-bottom) + 6px);
   transform: translateY(calc(-1 * var(--kb-height, 0px)));
-  transition: transform 0.25s ease;
+  transition: transform 0.15s ease;
+  z-index: 9999;
 }
 
 #toolbar button {
