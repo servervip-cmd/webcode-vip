@@ -29,38 +29,30 @@ body {
 
 :root {
   --kb-height: 0px;
+  --toolbar-height: 0px;
 }
 
 /* พื้นที่ terminal จะหดตามคีย์บอร์ด */
+/* ใช้ dynamic viewport ของ iOS */
 #terminal {
-  position: absolute;
-  top: 0; 
-  bottom: 0;
-  left: 0; 
-  right: 0;
-  flex: 1;
-  height: calc(100dvh - var(--kb-height, 0px) - 70px);
-  padding: 5px;
-  transition: height 0.15s ease;
+  height: calc(100dvh - var(--toolbar-height) - var(--kb-height));
+  transition: height 0.2s ease;
 }
 
 /* ===== Toolbar ===== */
 #toolbar {
   position: fixed;
-  bottom: 0;
+  bottom: env(safe-area-inset-bottom); /* กันชนแถบ iPhone */
   left: 0;
   width: 100%;
-  height: 70px;
   background: #000;
   display: flex;
   justify-content: center;
   align-items: center;
-  gap: 8px;
+  gap: 6px;
   border-top: 1px solid #00ff00;
-  transform: translateY(calc(-1 * var(--kb-height, 0px)));
-  transition: transform 0.15s ease;
   z-index: 9999;
-  
+
   transform: translateY(calc(-1 * var(--kb-height)));
   transition: transform 0.25s ease;
 }
