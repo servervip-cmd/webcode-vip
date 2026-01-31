@@ -27,6 +27,10 @@ body {
   flex-direction: column;
 }
 
+:root {
+  --kb-height: 0px;
+}
+
 /* พื้นที่ terminal จะหดตามคีย์บอร์ด */
 #terminal {
   position: absolute;
@@ -56,6 +60,9 @@ body {
   transform: translateY(calc(-1 * var(--kb-height, 0px)));
   transition: transform 0.15s ease;
   z-index: 9999;
+  
+  transform: translateY(calc(-1 * var(--kb-height)));
+  transition: transform 0.25s ease;
 }
 
 #toolbar button {
