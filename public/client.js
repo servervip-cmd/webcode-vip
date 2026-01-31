@@ -187,3 +187,30 @@ async function pasteFromClipboard() {
 function keepKeyboardOpen() {
   term.focus();   // บังคับโฟกัสกลับไปที่ xterm
 }
+
+function updateLayoutVars() {
+  const toolbar = document.getElementById("toolbar");
+  if (!toolbar) return;
+
+  // วัดความสูง toolbar จริงจาก DOM
+  const toolbarHeight = toolbar.offsetHeight;
+  document.documentElement.style.setProperty('--toolbar-height', toolbarHeight + 'px');
+
+  if (!window.visualViewport) return;
+
+  const kb = Math.max(0, window.innerHeight - window.visualViewport.height);
+  const keyboardHeight = kb > 120 ? kb : 0;
+
+  document.documentElement.style.setProperty('--kb-height', keyboardHeight + 'px');
+
+  resizeTerm(); // ให้ xterm คำนวณขนาดใหม่
+}
+
+if (window.visualViewport) {
+  visualViewport.addEventListener("resize", updateLayoutVars);
+  visualViewport.addEventListener("scroll", updateLayoutVars);
+}
+
+window.addEventListener("resize", updateLayoutVars);
+window.addEventListener("orientationchange", updateLayoutVars);
+window.addEventListener("load", updateLayoutVars);
