@@ -22,6 +22,11 @@ const termElement = document.getElementById("terminal");
 term.open(termElement);
 fitAddon.fit();
 
+term.textarea.setAttribute("autocapitalize", "off");
+term.textarea.setAttribute("autocomplete", "off");
+term.textarea.setAttribute("autocorrect", "off");
+term.textarea.setAttribute("spellcheck", "false");
+
 /* ================= SMART AUTO SCROLL ================= */
 
 let userScrolledUp = false;
@@ -77,10 +82,18 @@ function updateCtrlButton(state) {
 function toggleCtrl() {
   ctrlActive = !ctrlActive;
   updateCtrlButton(ctrlActive);
+  keepKeyboardOpen();
 }
 
-function sendESC() { socket.emit("input", "\x1b"); }
-function sendTab() { socket.emit("input", "\t"); }
+function sendESC() { 
+  socket.emit("input", "\x1b");
+  keepKeyboardOpen();
+}
+
+function sendTab() { 
+  socket.emit("input", "\t");
+  keepKeyboardOpen();
+}
 
 function sendArrow(dir) {
   const map = {
@@ -90,6 +103,7 @@ function sendArrow(dir) {
     left: "\x1b[D"
   };
   if (map[dir]) socket.emit("input", map[dir]);
+  keepKeyboardOpen();
 }
 
 /* ================= RESIZE TERMINAL ================= */
@@ -168,4 +182,8 @@ async function pasteFromClipboard() {
   } catch (err) {
     alert("ไม่สามารถวางข้อความได้ เบราว์เซอร์อาจไม่อนุญาต");
   }
+}
+
+function keepKeyboardOpen() {
+  term.focus();   // บังคับโฟกัสกลับไปที่ xterm
 }
