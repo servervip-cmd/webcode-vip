@@ -10,12 +10,19 @@ html, body {
   padding-bottom: env(safe-area-inset-bottom);
 }
 
+
+/* กัน scroll เด้งแบบเว็บ */
+body {
+  overscroll-behavior: none;
+  touch-action: manipulation;
+}
+
 #terminal-container {
   position: fixed;
   top: env(safe-area-inset-top);
   left: 0;
   width: 100%;
-  height: calc(100% - env(safe-area-inset-top));
+  height: calc(100vh - 70px - env(safe-area-inset-top));
   display: flex;
   flex-direction: column;
 }
