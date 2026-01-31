@@ -41,14 +41,9 @@ socket.on("output", data => {
 
   if (!writeScheduled) {
     writeScheduled = true;
-
     requestAnimationFrame(() => {
-      const shouldScroll = !userScrolledUp;
-
       term.write(writeBuffer);
-
-      if (shouldScroll) term.scrollToBottom();
-
+      term.scrollToBottom();
       writeBuffer = "";
       writeScheduled = false;
     });
@@ -112,8 +107,9 @@ let resizeTimeout;
 window.addEventListener("resize", () => {
   clearTimeout(resizeTimeout);
   resizeTimeout = setTimeout(() => {
-    resizeTerm();
-  }, 120); // รอให้หยุดขยับก่อนค่อย resize
+    fitAddon.fit();
+    socket.emit("resize", { cols: term.cols, rows: term.rows });
+  }, 120);
 });
 
 /* ================= iOS KEYBOARD → CSS VAR ================= */
