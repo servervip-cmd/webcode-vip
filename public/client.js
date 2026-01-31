@@ -117,14 +117,14 @@ window.addEventListener("resize", () => {
 function updateKeyboardHeight() {
   if (!window.visualViewport) return;
 
-  const keyboardHeight = window.innerHeight - window.visualViewport.height;
+  const kb = Math.max(0, window.innerHeight - window.visualViewport.height);
 
-  document.documentElement.style.setProperty(
-    "--kb-height",
-    keyboardHeight > 100 ? keyboardHeight + "px" : "0px"
-  );
+  // ถ้าคีย์บอร์ดสูงเกิน 120px ค่อยถือว่าเปิดจริง
+  const keyboardHeight = kb > 120 ? kb : 0;
 
-  resizeTerm();
+  document.documentElement.style.setProperty('--kb-height', keyboardHeight + 'px');
+
+  resizeTerm(); // ให้ terminal คำนวณขนาดใหม่
 }
 
 if (window.visualViewport) {
@@ -132,7 +132,7 @@ if (window.visualViewport) {
   visualViewport.addEventListener("scroll", updateKeyboardHeight);
 }
 
-window.addEventListener("load", updateKeyboardHeight);
+window.addEventListener("orientationchange", updateKeyboardHeight);
 
 /* ================= NANO MODE WINDOW ================= */
 
