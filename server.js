@@ -7,9 +7,7 @@ const cors = require("cors");
 const app = express();
 app.use(cors());
 app.use(express.static("public"));
-
 const server = http.createServer(app);
-
 const io = new Server(server, {
   cors: { origin: "*" },
   pingTimeout: 60000,
@@ -89,6 +87,27 @@ process.on("uncaughtException", (err) =>
 process.on("unhandledRejection", (err) =>
   console.error("Unhandled Rejection:", err)
 );
+
+const path = require("path");
+const fs = require("fs");
+
+app.get("/download", (req, res) => {
+  const filePath = req.query.path;
+  if (!filePath) return res.status(400).send("No file path");
+
+  const baseDir = process.env.HOME; // โฟลเดอร์หลักของเรา
+  const fullPath = path.join(baseDir, filePath);
+
+  if (!fullPath.startsWith(baseDir)) {
+    return res.status(403).send("Access denied");
+  }
+
+  if (!fs.existsSync(fullPath)) {
+    return res.status(404).send("File not found");
+  }
+
+  res.download(fullPath);
+});
 
 const PORT = process.env.PORT || 3000;
 server.listen(PORT, () => {
