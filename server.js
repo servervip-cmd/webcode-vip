@@ -95,15 +95,19 @@ app.get("/download", (req, res) => {
   const filePath = req.query.path;
   if (!filePath) return res.status(400).send("No file path");
 
-  const baseDir = process.env.HOME; // โฟลเดอร์หลักของเรา
-  const fullPath = path.join(baseDir, filePath);
+  const baseDir = path.join(process.env.HOME, "public"); // โฟลเดอร์ไฟล์จริง
+  const fullPath = path.resolve(baseDir, filePath);
 
-  if (!fullPath.startsWith(baseDir)) {
+  if (!fullPath.startsWith(baseDir + path.sep)) {
     return res.status(403).send("Access denied");
   }
 
   if (!fs.existsSync(fullPath)) {
     return res.status(404).send("File not found");
+  }
+
+  if (!fs.statSync(fullPath).isFile()) {
+    return res.status(400).send("Not a file");
   }
 
   res.download(fullPath);
