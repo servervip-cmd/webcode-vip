@@ -95,22 +95,33 @@ app.get("/download", (req, res) => {
   const filePath = req.query.path;
   if (!filePath) return res.status(400).send("No file path");
 
-  const baseDir = path.join(process.env.HOME, "public"); // โฟลเดอร์ไฟล์จริง
+  // อ้างอิงโฟลเดอร์ public จริงของโปรเจกต์
+  const baseDir = path.join(__dirname, "public");
+
+  // แปลงเป็น absolute path และกัน ../
   const fullPath = path.resolve(baseDir, filePath);
 
+  // กันออกนอกโฟลเดอร์ public
   if (!fullPath.startsWith(baseDir + path.sep)) {
     return res.status(403).send("Access denied");
   }
 
+  // เช็คว่าไฟล์มีจริง
   if (!fs.existsSync(fullPath)) {
     return res.status(404).send("File not found");
   }
 
+  // ต้องเป็นไฟล์ ไม่ใช่โฟลเดอร์
   if (!fs.statSync(fullPath).isFile()) {
     return res.status(400).send("Not a file");
   }
 
-  res.download(fullPath);
+  res.download(fullPath, path.basename(fullPath), (err) => {
+    if (err) {
+      console.error("Download error:", err);
+      res.status(500).send("Download failed");
+    }
+  });
 });
 
 const PORT = process.env.PORT || 3000;
