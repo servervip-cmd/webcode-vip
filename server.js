@@ -23,7 +23,7 @@ io.on("connection", (socket) => {
     name: "xterm-256color",
     cols: 80,
     rows: 24,
-    cwd: process.env.HOME,
+    cwd: __dirname,   // ให้ shell ใช้โฟลเดอร์เดียวกับ serverHOME,
     env: {
       ...process.env,
       TERM: "xterm-256color"
