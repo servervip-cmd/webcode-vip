@@ -95,28 +95,36 @@ app.get("/download", (req, res) => {
   const filePath = req.query.path;
   if (!filePath) return res.status(400).send("No file path");
 
-  // อ้างอิงโฟลเดอร์ public จริงของโปรเจกต์
-  const baseDir = path.join(__dirname, "public");
+  // อนุญาตให้โหลดได้จาก 2 โฟลเดอร์เท่านั้น
+  const allowedBases = [
+    path.join(__dirname, "public"), // ไฟล์เว็บ
+    "/root"                         // ไฟล์จาก terminal
+  ];
 
-  // แปลงเป็น absolute path และกัน ../
-  const fullPath = path.resolve(baseDir, filePath);
+  // หา full path จริง
+  let fullPath = null;
 
-  // กันออกนอกโฟลเดอร์ public
-  if (!fullPath.startsWith(baseDir + path.sep)) {
+  for (const base of allowedBases) {
+    const resolved = path.resolve(base, filePath);
+    if (resolved.startsWith(base + path.sep)) {
+      fullPath = resolved;
+      break;
+    }
+  }
+
+  if (!fullPath) {
     return res.status(403).send("Access denied");
   }
 
-  // เช็คว่าไฟล์มีจริง
   if (!fs.existsSync(fullPath)) {
     return res.status(404).send("File not found");
   }
 
-  // ต้องเป็นไฟล์ ไม่ใช่โฟลเดอร์
   if (!fs.statSync(fullPath).isFile()) {
     return res.status(400).send("Not a file");
   }
 
-  res.download(fullPath, path.basename(fullPath), (err) => {
+  res.download(fullPath, path.basename(fullPath), err => {
     if (err) {
       console.error("Download error:", err);
       res.status(500).send("Download failed");
