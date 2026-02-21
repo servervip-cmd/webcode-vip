@@ -4,7 +4,7 @@ const socket = io();
 
 const term = new Terminal({
   cursorBlink: false,
-  fontSize: 11,
+  fontSize: 14,
   lineHeight: 1.1,
   fontFamily: "JetBrains Mono, monospace",
   scrollback: 2000,
