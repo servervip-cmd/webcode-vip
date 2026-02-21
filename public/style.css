@@ -65,11 +65,11 @@ body {
   color: #00ff00;
   border: 1px solid #00ff00;
   padding: 10px 14px;
-  font-size: 13px;
+  font-size: 12px;
   font-weight: 500;
   border-radius: 8px;
-  min-width: 42px;
-  min-height: 42px;
+  min-width: 35px;
+  min-height: 35px;
   flex: 1;
   max-width: 70px;
   transition: all 0.15s ease;
